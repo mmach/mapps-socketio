@@ -19,6 +19,7 @@
   "homepage": "https://github.com/mmach/mapps-socketio#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "better-validator": "^2.1.9",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
