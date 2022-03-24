@@ -86,25 +86,25 @@ let createIo = (soc) => {
         });
 
         socket.on('join-room', async ({ id, conversation_id }) => {
-            if (!socket.adapter.rooms[conversation_id]) {
+            //if (!socket.adapter.rooms[conversation_id]) {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
                 //socket.join(conversation_id)
                 await io.adapter.remoteJoin(user_id, conversation_id);
 
                 socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
-            }
+            //}
         });
         socket.on('join-iua', async ({ id, iua_id }) => {
-            if (!socket.adapter.rooms[iua_id]) {
+            //if (!socket.adapter.rooms['IUA-' + iua_id]) {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
                 //socket.join('IUA-' + iua_id)
                 await io.adapter.remoteJoin(user_id, 'IUA-' + iua_id);
 
                 //socket.to('IUA-' + iua_id).emit(user_id, { id, user_id, iua_id });
-            }
+           // }
         });
         socket.on('leave-iua', async ({ id, iua_id }) => {
-            console.log(socket.adapter.rooms[iua_id]);
+            console.log(socket.adapter.rooms['IUA-' + iua_id]);
             console.log('USER: ' + user_id + ' leave IUA: ' + iua_id)
             //            io_s.socket.leave('IUA-' + iua_id)
             await io.adapter.remoteLeave(user_id, 'IUA-' + iua_id);
