@@ -1,6 +1,6 @@
 var socket = require('socket.io-client');
 
-socket = socket('http://localhost:3000/socket_your-namespace', { transports: ['websocket'], query: { source_id: 'user_id_2', auth: 'auth' } });
+socket = socket('http://localhost:3005/socket_dGh0ZVk1aW1PdExONDRsdXN6bzNWdHR5SGIxeDlBLg', { transports: ['websocket'], query: { source_id: 'user_id_2', auth: 'auth' } });
 
 
 
