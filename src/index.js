@@ -23,7 +23,13 @@ const pubClient = require('redis').createClient({
 })
 const subClient = pubClient.duplicate();
 
-let io_s = require('socket.io')(server);
+let io_s = require('socket.io')(server,
+    {
+        cors: {
+            origin: '*',
+
+        }
+    })
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
     io_s.adapter(createAdapter(pubClient, subClient));
 

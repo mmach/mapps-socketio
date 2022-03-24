@@ -1,0 +1,4 @@
+
+oc new-app nodeshift/centos7-s2i-nodejs:12.x~https://github.com/mmach/mapps-socketio --name=mapps-io-sockets-01
+
+oc expose mapps-io-sockets-01 --name=mapps-sockets-01
