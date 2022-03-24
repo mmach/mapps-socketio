@@ -88,27 +88,34 @@ let createIo = (soc) => {
         socket.on('join-room', ({ id, conversation_id }) => {
             if (!socket.adapter.rooms[conversation_id]) {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
-                socket.join(conversation_id)
+                //socket.join(conversation_id)
+                await io.adapter.remoteJoin(user_id, conversation_id);
+
                 socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
             }
         });
-        socket.on('join-iua', ({ id, iua_id }) => {
+        socket.on('join-iua', async ({ id, iua_id }) => {
             if (!socket.adapter.rooms[iua_id]) {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
-                socket.join('IUA-' + iua_id)
-                socket.to('IUA-' + iua_id).emit('iua_joined', { id, user_id, iua_id });
+                //socket.join('IUA-' + iua_id)
+                await io.adapter.remoteJoin(user_id, 'IUA-' + iua_id);
+
+                //socket.to('IUA-' + iua_id).emit(user_id, { id, user_id, iua_id });
             }
         });
         socket.on('leave-iua', ({ id, iua_id }) => {
             console.log(socket.adapter.rooms[iua_id]);
             console.log('USER: ' + user_id + ' leave IUA: ' + iua_id)
-            socket.leave('IUA-' + iua_id)
+            //            io_s.socket.leave('IUA-' + iua_id)
+            await io.adapter.remoteLeave(user_id, 'IUA-' + iua_id);
             //  socket.to(iua_id).emit('message-new-member', { id, user_id, conversation_id });
 
         });
         socket.on('leave-room', ({ id, user_id, conversation_id }) => {
             console.log('USER: ' + user_id + ' leaved CONVERSATION: ' + conversation_id)
-            socket.leave(conversation_id);
+            await io.adapter.remoteLeave(user_id, conversation_id);
+
+            //  socket.leave(conversation_id);
             io.to(conversation_id).emit('message-room', { id, user_id, conversation_id });
         });
         /*socket.on('message-join', ({ conv_id, user_id, message, createdDate }) => {
