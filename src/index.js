@@ -11,8 +11,10 @@ const { http_request } = require('./http_request.js')
 const ioredis = require('ioredis')
 const { createAdapter } = require('@socket.io/redis-adapter');
 const { Emitter } = require("@socket.io/redis-emitter");
-
+const cors = require('cors');
+console.log('RUN SOCKETS')
 app.set('port', process.env.PORT || (process.argv[2] && process.argv[2].split('=')[1]) || 3005);
+app.use(cors())
 
 const server = app.listen(app.get('port'), () => {
     console.log('Express server listening on port ' + app.get('port'));
