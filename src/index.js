@@ -139,7 +139,7 @@ let createIo = (soc) => {
 
         socket.on('msg-saved', (obj) => {
             console.log('msg-saved')
-            io.to(conversation_id).emit('msg-saved',obj);
+            io.emit('msg-saved',obj);
         });
 
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
