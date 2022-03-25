@@ -50,9 +50,10 @@ let createIo = (soc) => {
     io.on('connection', async (socket, err) => {
         let user_id = ''
         try {
-            //    user_id = socket.handshake.query.user_id
-            socket.join('USER-' + user_id);
-            //    await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
+            user_id = socket.handshake.query.user_id
+            console.log(user_id)
+            //socket.join('USER-' + user_id);
+            await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
             console.log(err)
@@ -96,9 +97,9 @@ let createIo = (soc) => {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
                 socket.join(conversation_id)
                 console.log(socket.id)
-                //   await io.adapter.remoteJoin(socket.id, conversation_id);
+                await io.adapter.remoteJoin(socket.id, conversation_id);
 
-                socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
+                //socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
             } catch (er) {
                 console.log(er)
             }
@@ -108,10 +109,10 @@ let createIo = (soc) => {
             //if (!socket.adapter.rooms['IUA-' + iua_id]) {
             try {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
-                socket.join('IUA-' + iua_id)
+                //socket.join('IUA-' + iua_id)
                 //console.log(socket.id)
 
-                //await io.adapter.remoteJoin(socket.id, 'IUA-' + iua_id);
+                await io.adapter.remoteJoin(socket.id, 'IUA-' + iua_id);
             } catch (er) {
                 console.log(er)
             }
@@ -128,9 +129,9 @@ let createIo = (soc) => {
         });
         socket.on('leave-room', async ({ id, user_id, conversation_id }) => {
             console.log('USER: ' + user_id + ' leaved CONVERSATION: ' + conversation_id)
-            //  await io.adapter.remoteLeave(user_id, conversation_id);
+            await io.adapter.remoteLeave(user_id, conversation_id);
 
-            socket.leave(conversation_id);
+            //socket.leave(conversation_id);
             io.to(conversation_id).emit('message-room', { id, user_id, conversation_id });
         });
         /*socket.on('message-join', ({ conv_id, user_id, message, createdDate }) => {
