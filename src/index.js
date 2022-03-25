@@ -93,7 +93,8 @@ let createIo = (soc) => {
                 //if (!socket.adapter.rooms[conversation_id]) {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
                 //socket.join(conversation_id)
-                await io.adapter.remoteJoin(user_id, conversation_id);
+                console.log(socket.id)
+                await io.adapter.remoteJoin(socket.id, conversation_id);
 
                 socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
             } catch (er) {
@@ -106,7 +107,9 @@ let createIo = (soc) => {
             try {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
                 //socket.join('IUA-' + iua_id)
-                await io.adapter.remoteJoin(user_id, 'IUA-' + iua_id);
+                console.log(socket.id)
+
+                await io.adapter.remoteJoin(socket.id, 'IUA-' + iua_id);
             } catch (er) {
                 console.log(er)
             }
