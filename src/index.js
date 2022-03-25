@@ -136,6 +136,12 @@ let createIo = (soc) => {
         /*socket.on('message-join', ({ conv_id, user_id, message, createdDate }) => {
             io.to(conv_id).emit('message-room', { conv_id, user_id, message, createdDate });
         });*/
+
+        socket.on('msg-saved', (obj) => {
+            console.log('msg-saved')
+            io.to(conversation_id).emit('msg-saved',obj);
+        });
+
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
             console.log('message to conv_id' + conversation_id + ' user_id ' + user_id)
             io.to(conversation_id).emit('message-room', { id, conversation_id, conversation });
