@@ -58,6 +58,11 @@ let createIo = (soc) => {
         } catch (err) {
             console.log(err)
         }
+        //  let keepAlive = setInterval(sendHeartbeat, 25000);
+        //  function sendHeartbeat() {
+        //      io.sockets.emit("ping", socket.id);
+        //      console.log(io.sockets.adapter.rooms);
+        //  }
         //console.log(socketsChat) 
         socket.on('time', (time) => {
             console.log(`PING : ${time}`)
@@ -65,20 +70,8 @@ let createIo = (soc) => {
 
         });
 
-        socket.on('ping', ({ id, user_id, userlist_ids }) => {
-            console.log(`PING : ${user_id}`)
-            userlist_ids.forEach(i => {
-                io.emit(i + '#ping', { id, user_id });
-            })
-
-        });
-
-        socket.on('pong', ({ id, user_id, user_dest_id }) => {
-            console.log(`PONG : ${user_id}`)
-
-            userlist_ids.forEach(i => {
-                io.emit(user_dest_id + '#pong', { id, user_id });
-            })
+        socket.on('ping', ({ user_id }) => {
+            console.log(`PING : ${socket.id}`)
         });
 
         socket.on('info', ({ id, user_src_id, msg }) => {
@@ -143,6 +136,11 @@ let createIo = (soc) => {
             io.emit('msg-saved', obj);
         });
 
+
+        socket.on("disconnect", async () => {
+            console.log('DISCIONNECTED')
+            // clearInterval(keepAlive);
+        });
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
             console.log('message to conv_id' + conversation_id + ' user_id ' + user_id)
             io.to(conversation_id).emit('message-room', { id, conversation_id, conversation });
