@@ -29,7 +29,10 @@ let io_s = require('socket.io')(server, {
     cors: { origin: "*", credentials: false },
 })
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
-    io_s.adapter(createAdapter(pubClient, subClient));
+    io_s.adapter(createAdapter(pubClient, subClient,
+        {
+            requestsTimeout:5000
+        }));
 
 })
 
