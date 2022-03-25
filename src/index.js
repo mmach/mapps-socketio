@@ -31,7 +31,7 @@ let io_s = require('socket.io')(server, {
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
     io_s.adapter(createAdapter(pubClient, subClient,
         {
-            requestsTimeout:5000
+            requestsTimeout: 5000
         }));
 
 })
@@ -89,22 +89,29 @@ let createIo = (soc) => {
         });
 
         socket.on('join-room', async ({ id, conversation_id }) => {
-            //if (!socket.adapter.rooms[conversation_id]) {
+            try {
+                //if (!socket.adapter.rooms[conversation_id]) {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
                 //socket.join(conversation_id)
                 await io.adapter.remoteJoin(user_id, conversation_id);
 
                 socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
+            } catch (er) {
+                console.log(er)
+            }
             //}
         });
         socket.on('join-iua', async ({ id, iua_id }) => {
             //if (!socket.adapter.rooms['IUA-' + iua_id]) {
+            try {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
                 //socket.join('IUA-' + iua_id)
                 await io.adapter.remoteJoin(user_id, 'IUA-' + iua_id);
-
-                //socket.to('IUA-' + iua_id).emit(user_id, { id, user_id, iua_id });
-           // }
+            } catch (er) {
+                console.log(er)
+            }
+            //socket.to('IUA-' + iua_id).emit(user_id, { id, user_id, iua_id });
+            // }
         });
         socket.on('leave-iua', async ({ id, iua_id }) => {
             console.log(socket.adapter.rooms['IUA-' + iua_id]);
