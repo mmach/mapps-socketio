@@ -92,10 +92,7 @@ let createIo = (soc) => {
                 const sockets = await io.in(conversation_id).allSockets();
                 console.log(sockets)
                 console.log(sockets[socket.id])
-                sockets.find(i => {
-                    console.log(i);
-                    return true;
-                })
+               
                 await io.adapter.remoteJoin(socket.id, conversation_id);
                 socket.to('joined-room').emit({
                     conversation_id
