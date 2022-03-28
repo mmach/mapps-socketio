@@ -49,10 +49,13 @@ let createIo = (soc) => {
 
     io.on('connection', async (socket, err) => {
         let user_id = ''
+        let Kupa = 'przed'
         try {
             user_id = socket.handshake.query.user_id
             console.log('connected - ' + user_id)
             //socket.join('USER-' + user_id);
+            const sockets = await io.in('USER-' + user_id).allSockets();
+            console.log(sockets)
             await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
@@ -69,7 +72,11 @@ let createIo = (soc) => {
 
 
         });
+        socket.on('connected', (time) => {
+            console.log(`PING : ${time}`)
 
+
+        });
         socket.on('ping', ({ user_id }) => {
             console.log(`PING : ${socket.id}`)
         });
@@ -138,7 +145,9 @@ let createIo = (soc) => {
 
 
         socket.on("disconnect", async () => {
-            console.log('DISCIONNECTED')
+            console.log('disconnecetd - ' + user_id)
+
+            let Kupa = 'przed'
             // clearInterval(keepAlive);
         });
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
