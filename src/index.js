@@ -53,9 +53,11 @@ let createIo = (soc) => {
         try {
             user_id = socket.handshake.query.user_id
             console.log('connected - ' + user_id)
+            console.log('socket id - ' + socket.id)
+
             //socket.join('USER-' + user_id);
             const sockets = await io.in('USER-' + user_id).allSockets();
-            console.log(sockets[socket.id])
+            console.log(sockets)
             await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
