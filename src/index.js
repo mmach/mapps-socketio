@@ -56,19 +56,13 @@ let createIo = (soc) => {
             console.log('socket id - ' + socket.id)
 
             //socket.join('USER-' + user_id);
-            const sockets = await io.in('USER-' + user_id).allSockets();
-            console.log(sockets)
+           
             await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
             console.log(err)
         }
-        //  let keepAlive = setInterval(sendHeartbeat, 25000);
-        //  function sendHeartbeat() {
-        //      io.sockets.emit("ping", socket.id);
-        //      console.log(io.sockets.adapter.rooms);
-        //  }
-        //console.log(socketsChat) 
+       
         socket.on('time', (time) => {
             console.log(`PING : ${time}`)
 
@@ -76,8 +70,6 @@ let createIo = (soc) => {
         });
         socket.on('connected', (time) => {
             console.log(`PING : ${time}`)
-
-
         });
         socket.on('ping', ({ user_id }) => {
             console.log(`PING : ${socket.id}`)
@@ -97,10 +89,12 @@ let createIo = (soc) => {
             try {
                 //if (!socket.adapter.rooms[conversation_id]) {
                 console.log('USER: ' + user_id + ' joined to CONVERSATION: ' + conversation_id)
-                socket.join(conversation_id)
-                console.log(socket.id)
+                const sockets = await io.in(conversation_id).allSockets();
+                console.log(sockets)
                 await io.adapter.remoteJoin(socket.id, conversation_id);
-
+                socket.to('joined-room').emit({
+                    conversation_id
+                });
                 //socket.to(conversation_id).emit('message-new-member', { id, user_id, conversation_id });
             } catch (er) {
                 console.log(er)
@@ -113,8 +107,14 @@ let createIo = (soc) => {
                 console.log('USER: ' + user_id + ' joined to IUA: ' + iua_id)
                 //socket.join('IUA-' + iua_id)
                 //console.log(socket.id)
+                const sockets = await io.in('IUA-' + iua_id).allSockets();
+                console.log(sockets)
 
                 await io.adapter.remoteJoin(socket.id, 'IUA-' + iua_id);
+                socket.to('joined-iua').emit({
+                    iua_id
+                });
+
             } catch (er) {
                 console.log(er)
             }
@@ -122,19 +122,32 @@ let createIo = (soc) => {
             // }
         });
         socket.on('leave-iua', async ({ id, iua_id }) => {
-            console.log(socket.adapter.rooms['IUA-' + iua_id]);
-            console.log('USER: ' + user_id + ' leave IUA: ' + iua_id)
-            io_s.socket.leave('IUA-' + iua_id)
-            // await io.adapter.remoteLeave(user_id, 'IUA-' + iua_id);
+            try {
+                console.log('USER: ' + user_id + ' leave IUA: ' + iua_id)
+
+                await io.adapter.remoteLeave(socket.id, 'IUA-' + iua_id);
+                socket.to('leaved-iua').emit({
+                    iua_id
+                });
+            } catch (er) {
+
+            }
             //  socket.to(iua_id).emit('message-new-member', { id, user_id, conversation_id });
 
         });
         socket.on('leave-room', async ({ id, user_id, conversation_id }) => {
-            console.log('USER: ' + user_id + ' leaved CONVERSATION: ' + conversation_id)
-            await io.adapter.remoteLeave(user_id, conversation_id);
+            try {
+                console.log('USER: ' + user_id + ' leaved CONVERSATION: ' + conversation_id)
+
+                await io.adapter.remoteLeave(user_id, conversation_id);
+                socket.to('leaved-room').emit({
+                    conversation_id
+                });
+            } catch (er) {
+
+            }
 
             //socket.leave(conversation_id);
-            io.to(conversation_id).emit('message-room', { id, user_id, conversation_id });
         });
         /*socket.on('message-join', ({ conv_id, user_id, message, createdDate }) => {
             io.to(conv_id).emit('message-room', { conv_id, user_id, message, createdDate });
@@ -147,10 +160,8 @@ let createIo = (soc) => {
 
 
         socket.on("disconnect", async () => {
-            console.log('disconnecetd - ' + user_id)
+            await io.adapter.remoteDisconnect(socket.id, true);
 
-            let Kupa = 'przed'
-            // clearInterval(keepAlive);
         });
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
             console.log('message to conv_id' + conversation_id + ' user_id ' + user_id)
