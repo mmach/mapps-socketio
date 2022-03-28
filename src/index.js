@@ -166,10 +166,13 @@ let createIo = (soc) => {
 
 
         socket.on("disconnect", async (reason) => {
-            console.log('Socket disconnected. Reason:', reason);
+            try {
+                console.log('Socket disconnected. Reason:', reason);
 
-            await io.adapter.remoteDisconnect(socket.id, true);
-
+                await io.adapter.remoteDisconnect(socket.id, true);
+            } catch (er) {
+                console.log(er)
+            }
         });
         socket.on('message-room', ({ id, conversation_id, conversation }) => {
             console.log('message to conv_id' + conversation_id + ' user_id ' + user_id)
