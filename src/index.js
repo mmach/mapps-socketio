@@ -55,7 +55,7 @@ let createIo = (soc) => {
             console.log('connected - ' + user_id)
             //socket.join('USER-' + user_id);
             const sockets = await io.in('USER-' + user_id).allSockets();
-            console.log(sockets)
+            console.log(sockets[socket.id])
             await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
