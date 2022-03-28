@@ -56,13 +56,13 @@ let createIo = (soc) => {
             console.log('socket id - ' + socket.id)
 
             //socket.join('USER-' + user_id);
-           
+
             await io.adapter.remoteJoin(socket.id, 'USER-' + user_id);
 
         } catch (err) {
             console.log(err)
         }
-       
+
         socket.on('time', (time) => {
             console.log(`PING : ${time}`)
 
@@ -159,7 +159,9 @@ let createIo = (soc) => {
         });
 
 
-        socket.on("disconnect", async () => {
+        socket.on("disconnect", async (reason) => {
+            console.log('Socket disconnected. Reason:', reason);
+
             await io.adapter.remoteDisconnect(socket.id, true);
 
         });
