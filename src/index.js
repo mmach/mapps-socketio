@@ -149,8 +149,6 @@ let createIo = (soc) => {
             } catch (er) {
 
             }
-
-            //socket.leave(conversation_id);
         });
         /*socket.on('message-join', ({ conv_id, user_id, message, createdDate }) => {
             io.to(conv_id).emit('message-room', { conv_id, user_id, message, createdDate });
