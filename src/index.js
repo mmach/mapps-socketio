@@ -197,22 +197,17 @@ let init = () => {
         }, 'pl-PL', user, proj)
     }).then(succ => {
         // console.log(io_s)
-      
+
         succ.data.forEach(i => {
             let socket = Buffer.from(i.socket).toString('base64').replace(/=/g, '')
-            // console.log(io_s)
             const test = io_s._nsps.keys()
             let exist = false
             for (const item of test) {
-              
                 if (item == `/socket_${socket}`) {
                     exist = true
                 }
             }
-       
-            //console.log(io_s._nsps[`/socket_${socket}`])
             if (!exist) {
-
                 createIo(socket)
             }
 
