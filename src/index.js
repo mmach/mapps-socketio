@@ -212,6 +212,6 @@ let init = () => {
     })
 }
 init()
-setInterval(() => {
-    init()
-}, 3600000)
+//setInterval(() => {
+//    init()
+//}, 3600000)
