@@ -43,7 +43,7 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 const userMapper = []
 
 let createIo = (soc) => {
-    console.log(`/socket_${soc}`)
+    console.log(` create new socket namespace : /socket_${soc}`)
     const io = io_s.of(`/socket_${soc}`);
     // view engine setup
 
@@ -92,7 +92,7 @@ let createIo = (soc) => {
                 const sockets = await io.in(conversation_id).allSockets();
                 console.log(sockets)
                 console.log(sockets[socket.id])
-               
+
                 await io.adapter.remoteJoin(socket.id, conversation_id);
                 socket.to('joined-room').emit({
                     conversation_id
@@ -196,15 +196,23 @@ let init = () => {
 
         }, 'pl-PL', user, proj)
     }).then(succ => {
-        console.log(succ.data)
+        // console.log(io_s)
+      
         succ.data.forEach(i => {
             let socket = Buffer.from(i.socket).toString('base64').replace(/=/g, '')
             // console.log(io_s)
+            const test = io_s._nsps.keys()
+            let exist = false
+            for (const item of test) {
+              
+                if (item == `/socket_${socket}`) {
+                    exist = true
+                }
+            }
+       
+            //console.log(io_s._nsps[`/socket_${socket}`])
+            if (!exist) {
 
-            if (Object.keys(io_s._nsps).filter(k => {
-                //  console.log(io_s)
-                return `/socket_${socket}` == k
-            }).length == 0) {
                 createIo(socket)
             }
 
@@ -212,6 +220,6 @@ let init = () => {
     })
 }
 init()
-//setInterval(() => {
-//    init()
-//}, 3600000)
+setInterval(() => {
+    init()
+}, 360000)
