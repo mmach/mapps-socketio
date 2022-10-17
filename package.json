@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "flatted": "^3.2.7",
     "http": "0.0.1-security",
     "ioredis": "^4.27.8",
     "justshare-shared": "^1.0.104",

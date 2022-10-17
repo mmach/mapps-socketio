@@ -1,4 +1,7 @@
 
-oc new-app nodeshift/centos7-s2i-nodejs:12.x~https://github.com/mmach/mapps-socketio --name=mapps-io-sockets-01
+oc login https://api.pro-eu-west-1.openshift.com --token=QNnFzWbLXr6rXqVFXQyW_kvIn8zQCCQsCXMeB-YLoqc
+
+
+oc new-app nodeshift/centos7-s2i-nodejs:12.x~https://github.com/mmach/mapps-crons--name=mapps-crons
 
 oc expose mapps-io-sockets-01 --name=mapps-sockets-01
