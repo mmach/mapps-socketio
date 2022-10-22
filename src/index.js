@@ -1,17 +1,14 @@
-// Module dependencies.
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-//const redis = require('socket.io-redis');
-const app = module.exports = express();
-const axios = require('axios')
-const { QueryList } = require('justshare-shared')
-require('dotenv').config()
-const { http_request } = require('./http_request.js')
-const ioredis = require('ioredis')
-const { createAdapter } = require('@socket.io/redis-adapter');
-const { Emitter } = require("@socket.io/redis-emitter");
-const cors = require('cors');
+import express from 'express';
+import { createAdapter } from '@socket.io/redis-adapter';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { QueryList } from 'justshare-shared';
+import { createClient } from 'redis';
+import { Server } from "socket.io";
+import { http_request } from './http_request.js';
+
+const app = express();
+dotenv.config()
 console.log('RUN SOCKETS')
 app.set('port', process.env.PORT || (process.argv[2] && process.argv[2].split('=')[1]) || 3005);
 app.use(cors())
@@ -20,12 +17,12 @@ const server = app.listen(app.get('port'), () => {
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-const pubClient = require('redis').createClient({
+const pubClient = createClient({
     url: 'redis://default:9GP9aoV3BrtzyRu61ovBVnCmmiw1DKkE@redis-16920.c233.eu-west-1-1.ec2.cloud.redislabs.com:16920'
 })
 const subClient = pubClient.duplicate();
 
-let io_s = require('socket.io')(server, {
+let io_s = new Server(server, {
     cors: { origin: "*", credentials: false },
 })
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
