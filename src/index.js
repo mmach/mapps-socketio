@@ -10,7 +10,7 @@ import { http_request } from './http_request.js';
 const app = express();
 dotenv.config()
 console.log('RUN SOCKETS')
-app.set('port', process.env.PORT || (process.argv[2] && process.argv[2].split('=')[1]) || 3005);
+app.set('port', process.env.PORT || (process.argv[2] && process.argv[2].split('=')[1]) || 8080)//3005);
 app.use(cors())
 
 const server = app.listen(app.get('port'), () => {
